@@ -1,20 +1,16 @@
-# Онлайн проекта <a href="https://github.com/JavaWebinar/topjava">Topjava</a>
+https://alvinalexander.com/blog/post/java/determine-current-directory-i-e-where-my-application-is-started/
+
+# Онлайн-проект <a href="https://github.com/JavaWebinar/topjava">Topjava</a>
 
 ## <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFfkpMd2UyWjBsc2JsSE4tRDFkU3BvMktFQkhUN1J6VExxSUUzOHlSR0RhNm8">Материалы занятия</a>
 
 - **Браузер кэширует javascript и css. Если изменения не работают, обновите приложение в браузере (в хроме `Ctrl+F5`)**
 - **При удалении файлов не забывайте делать clean: `mvn clean`**
 
-### ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Правка и рефакторинг
+### ![correction](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Правки в проекте
 
-#### Apply 8_0_1_fix.patch
-> - Небольшая правка кода
-
-#### Apply 8_0_2_test_refactoring.patch
-
-> - Рефакторинг тестов
->   - `RootControllerTest`: вместо сравнения по полям можно использовать наш `UserTestData.assertMatch` с помощью `AssertionMatcher` адаптера. Методы сравнения по полям в `hamcrest-all` больше не нужны, заменил на `hamcrest-core`.
->   - Вместо сериализации ожидаемых объектов в json и сравнение с ответом в MVC через `content().json()` красивее десериализовать ответ в объект и сравнивать уже объекты через наши `assertMatch` c учетом игнорируемых полей. `jsonassert` становится не нужен.  
+#### Apply 8_0_fix.patch
+> - Правки кода
 
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Разбор домашнего задания HW7
 
@@ -33,18 +29,20 @@
 
 #### Apply 8_02_HW07_rest_controller.patch
 > - Как и для юзера сериализуем json ответ контроллера и сравниваем через `ResultMatcher`. Для `MealTo` используем в сравнении `isEqualTo`.  
+> - В `MealTo` вместо изменяемых полей и конструктора без параметров сделал `@ConstructorProperties`. `Immutable` классы всегда предпочтительнее для данных.
+>   - [Using @ConstructorProperties](https://www.logicbig.com/tutorials/misc/jackson/constructor-properties.html)
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFLXZ3OHdac18yZlk">HW7_Optional</a>
 #### Apply 8_03_HW07_formatters.patch
-> Перенес форматтеры в подпакет `web`, тк они используются Spring MVC
+> - Перенес форматтеры в подпакет `web`, тк они используются Spring MVC
+> - Заменил `@RequestParam(required = false)` на `@RequestParam @Nullable`
 
 #### Apply 8_04_HW07_soapui_curl.patch
 > Добавил примеры запросов curl в `config/curl.md`
 
   - <a href="http://rus-linux.net/lib.php?name=/MyLDP/internet/curlrus.html">Написание HTTP-запросов с помощью Curl</a> (для Windows можно использовать Git Bash)
-
+  
 ## Занятие 8:
-
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3.  <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFUmVsM3V6djMzYmc">WebJars. jQuery and JavaScript frameworks</a>
 #### Apply 8_05_webjars.patch
 > - Обновил jQuery до 3.x, Bootstrap до 4.x
@@ -53,7 +51,7 @@
 >   -  не встречал нигде, кроме Spring Pet Clinic;
 >   -  поддержка работы с datatables через Dandelion оказалось гораздо более трудоемкое, чем работа с плагином напрямую.
 > - Исключил из зависимостей webjars ненужные jQuery
-
+``
 -  Подключение веб ресурсов. <a href="http://www.webjars.org/">WebJars</a>.
 -  <a href="http://www.jamesward.com/2012/04/25/introducing-webjars-web-libraries-as-managed-dependencies">Introducing WebJars</a>
 -  <a href="https://ru.wikipedia.org/wiki/Document_Object_Model">Document Object Model (DOM)</a>
@@ -76,6 +74,7 @@
    - [Spacing](https://getbootstrap.com/docs/4.1/utilities/spacing/)
    - [Forms](https://getbootstrap.com/docs/4.1/components/forms/)
    - [Sticky footer](https://getbootstrap.com/docs/4.1/examples/sticky-footer/)
+- [Документация Bootstrap на русском](https://bootstrap-4.ru/)
 -  Дополнительно
    -  <a href="http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/">Twitter Bootstrap Tutorial</a>
    -  <a href="https://www.youtube.com/playlist?list=PLVfMKQXDAhGUxJ4prQSC2K13-YlYj8LgB">Видео уроки Bootstrap 4</a>
@@ -86,32 +85,36 @@
 
 #### Apply 8_07_ajax_datatables.patch
 > - Переименовал js скрипты по [javascript filename naming convention](https://stackoverflow.com/questions/7273316/what-is-the-javascript-filename-naming-convention)
-> - Сделал загрузку скриптов асинхронной (и все общие скрипты в `headTag.jsp`). Для асинхронной загрузки <a href="http://stackoverflow.com/a/41947330/548473">вынес скрипт</a> из `users.jsp` в `topjava.users.js`.
->   - [Внешние скрипты, порядок исполнения](https://learn.javascript.ru/external-script)
->   - <a href="http://stackoverflow.com/questions/436411/where-should-i-put-script-tags-in-html-markup/24070373#24070373">JavaScript loading modern approach</a>
-> - Добавил `dataTables.bootstrap4.js/css`
->   - <a href="https://datatables.net/examples/styling/bootstrap4">DataTables/Bootstrap 4 integration</a>
-> - Вместо id и селектора для добавления пользователя и сохранения формы использовал обработчик событий `onclick`
->   - <a href="https://learn.javascript.ru/introduction-browser-events">Введение в браузерные события</a>
 > - `reset()` не чистит скрытые (hidden) поля формы. Сделал очистку полей через `form.find(":input").val("")`    
-> - Обновил dataTables API:
->   - <a href="https://datatables.net/upgrade/1.10-convert">Converting parameter names for 1.10</a>
->   - <a href="http://stackoverflow.com/questions/25207147/datatable-vs-datatable-why-is-there-a-difference-and-how-do-i-make-them-w">dataTable() vs. DataTable()</a>
 > - Поменял форматирование модального окна: [Botstrap4 Modal](https://getbootstrap.com/docs/4.1/components/modal/)
 
--  <a href="https://ru.wikipedia.org/wiki/AJAX">AJAX</a>.
+JavaScript
+- <a href="https://ru.wikipedia.org/wiki/AJAX">AJAX</a>
+- <a href="https://learn.javascript.ru/introduction-browser-events">Введение в браузерные события</a>
+- [Скрипты: async, defer](https://learn.javascript.ru/script-async-defer)
+- [With defer, in the head](https://flaviocopes.com/javascript-async-defer/#with-defer-in-the-head)
+- <a href="http://stackoverflow.com/questions/436411/where-should-i-put-script-tags-in-html-markup/24070373#24070373">JavaScript loading modern approach</a>
+
+jQuery
 -  <a href="http://ruseller.com/jquery.php?id=124">Событие  $(document).ready</a>.
 -  <a href="http://anton.shevchuk.name/jquery/">jQuery для всех</a>.
 -  <a href="http://anton.shevchuk.name/javascript/jquery-for-beginners-ajax/">jQuery для начинающих. AJAX</a>.
 -  <a href="http://anton.shevchuk.name/javascript/jquery-for-beginners-selectors/">jQuery для начинающих. Селекторы</a>.
 - [jQuery task from freecodecamp](https://www.freecodecamp.org/map-aside#nested-collapsejQuery)
 -  <a href="http://api.jquery.com/">jQuery API</a>
--  <a href="http://bootstrap-ru.com/203/javascript.php">Javascript плагины для Bootstrap</a>
--  <a href="http://datatables.net/reference/api/">DataTables API</a>
 
-#### Apply 8_08_update_js.patch
->  - [Заменил `var` на `let`/`const`](https://learn.javascript.ru/let-const)(в IDEA нужно поменять версию JavaScript через `Alt+Enter`). Синтакс поддерживается [95% браузеров](https://caniuse.com/#feat=const). На каждом конкретном проекте поддерживаемые версии браузеров определяются бизнесом.
+DataTables/Bootstrap
+- <a href="http://datatables.net/reference/api/">DataTables API</a>
+- <a href="http://bootstrap-ru.com/203/javascript.php">Javascript плагины для Bootstrap</a>
+- <a href="https://datatables.net/examples/styling/bootstrap4">DataTables/Bootstrap 4 integration</a>
+- <a href="https://datatables.net/upgrade/1.10-convert">Converting parameter names for 1.10</a>
+- <a href="http://stackoverflow.com/questions/25207147/datatable-vs-datatable-why-is-there-a-difference-and-how-do-i-make-them-w">dataTable() vs. DataTable()</a>
+
+#### Apply 8_08_refactor_js.patch
+>  - Вместо глабальных переменных `ajaxUrl`, `datatableApi` задаю их в объекте контекст, который передаю в `makeEditable()` как параметр  
+>  - Вынес переменную `form = $('#detailsForm')` (инициализирую только 1-н раз)
 >  - [В `jquery.ajax` заменил depricated `success` на `done()`](http://api.jquery.com/jquery.ajax/#jqXHR)
+>  - При удалении строки добавил [подтверждение confirm](https://stackoverflow.com/questions/10462839/how-to-display-a-confirmation-dialog-when-clicking-an-a-link)
 
 ##  ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 6. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFMTVWaXdWRUZsUEE"> Notifications</a>
 #### Apply 8_09_notification.patch
@@ -131,8 +134,6 @@
 >    - [Adding a Password Encoder](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#ns-password-encoder)
 
 #### Apply 8_10_add_security.patch
-> ![question](https://cloud.githubusercontent.com/assets/13649199/13672858/9cd58692-e6e7-11e5-905d-c295d2a456f1.png) почему для `spring-security` версия не `${spring.version}' (5.1.2.RELEASE) ?
- 
 -  <a href="http://projects.spring.io/spring-security/">Spring Security</a>
 -  <a href="https://ru.wikipedia.org/wiki/Протокол_AAA">Протокол AAA</a>
 -  <a href="https://ru.wikipedia.org/wiki/Аутентификация_в_Интернете">Методы аутентификации</a>.
@@ -141,9 +142,11 @@
 -  <a href="http://www.baeldung.com/security-spring">Security with Spring</a>
 -  [Decode/Encode Base64 online](http://decodebase64.com/)
 
+Вместо 
+
 `curl -v -H 'Authorization: Basic dXNlckB5YW5kZXgucnU6cGFzc3dvcmQ=' http://localhost:8080/topjava/rest/profile/meals`
 
-аналогична
+лучше использовать эквивалентный
 
 `curl -v --user user@yandex.ru:password http://localhost:8080/topjava/rest/profile/meals`
 
@@ -157,7 +160,11 @@ $('.delete').click(function () {
 
 На все элементы DOM с классом `delete` вешается обработчик события `click` который вызывает функцию `deleteRow`. Классы в html разделяются через пробел. См. [селекторы в jQuery](http://anton.shevchuk.name/javascript/jquery-for-beginners-selectors/)
 
-> тянет ли bootstrap за собой jQuery?
+> Как в таблицу `<table id="datatable">` из JSP вставляются дополнительные `div`, поле для поиска, стрелочки для сортировки и т.д. (видны в браузере через `Inspect (Ctrl+Shift+I)` в хроме) ?
+
+JSP отдает html на клиента, в браузере играется скрипт `$("#datatable").DataTable(..)`, который модифицирует элемент таблицы и вставляет туда (в элементы DOM html документа) все табличные плюшки.
+
+> тянет ли Bootstrap за собой jQuery?
 
 Bootstrap css это стили (форматирование), Bootstrap js зависит от jQuery: http://stackoverflow.com/questions/14608681/can-i-use-twitter-bootstrap-without-jquery#answer-14608772
 
@@ -211,13 +218,12 @@ Maven скачивает все депенденси в local repository, кот
   - 1.2 При вставке данных по AJAX пропадает все JSP форматирование, чинить перерисовку НЕ надо. Следующий урок- будем делать datatable по AJAX и форматирование на стороне клиента.
 - 2: Т.к. HTML атрибут id у каждого элемента документа должен быть уникален, нужно избавиться от дублирования `id="${user.id}"` в строках таблиц users (`users.jsp`) (переместить атрибут id в тэг `<tr>` или передавать в качестве параметра функций через `onclick`)
 
-#### Optional.
+### Optional.
 - 3: Перевести работу фильтра на AJAX. Попробуйте после модификации таблицы (например добавлении записи) обновлять ее также с учетом фильтра.
   -  [Руководство по выбору между GET и POST](https://handynotes.ru/2009/08/get-versus-pos.html)
 - 4: Сделать кнопку сброса фильтра.
 - 5: Реализовать enable/disable User через checkbox в `users.jsp` с сохранением в DB.
 Неактивных пользователей выделить css стилем. Проверьте, как у вас первоначально (или по F5) отображаются неактивные пользователи (если меняете css при enable/disable)
-
 
 ---------------------
 ## ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Подсказки по HW08

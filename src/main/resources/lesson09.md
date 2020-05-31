@@ -5,12 +5,11 @@
 - **Браузер кэширует javascript и css. Если изменения не работают, обновите приложение в браузере по Ctrl+F5**
 - **При удалении файлов не забывайте делать clean: `mvn clean package`**
 
-### ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Правка
+### ![correction](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Правки в проекте
 
 #### Apply 9_0_fix.patch
-> - Из за [баги в FireFox](https://bugzilla.mozilla.org/show_bug.cgi?id=884693) при пустом ответе от Ajax в консоль браузера выводится:
-`Ошибка синтаксического анализа XML: корневой элемент не найден`. Лечится `@ResponseStatus(value = HttpStatus.NO_CONTENT)`.
-> - Уменьшил отступы у навигационной панели. См. [Bootstrap Spacing](https://getbootstrap.com/docs/4.1/utilities/spacing/)
+> - Добавил `@UniqueConstraint` в `user_roles`. Влияет только на автогенерацию базы по модели.
+> - Fix `spring-security.xml` и локализации фильтра
 
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Разбор домашнего задания HW8
 
@@ -21,7 +20,6 @@
 > - Все события сделал через `onlick`
 > - Фильтр еды сделал в [Bootstrap 4 Cards](https://getbootstrap.com/docs/4.1/components/card/)
 > - Удалил лишние классы, JSP и i18N
-> - Вместо глабальных переменных `ajaxUrl`, `datatableApi` и одинаковой функции обновления таблицы `updateTable()` задаю их в объекте контекст, который передаю в `makeEditable()` как параметр  
 
 - [Bootstrap forms](https://getbootstrap.com/docs/4.1/components/forms/)
 - [Grid system](https://getbootstrap.com/docs/4.1/layout/grid/)
@@ -30,7 +28,7 @@
 #### ![question](https://cloud.githubusercontent.com/assets/13649199/13672858/9cd58692-e6e7-11e5-905d-c295d2a456f1.png) Вопрос:
 > Можно ли было удаление делать без перезагрузки таблицы (удалением строки) и для редактирования брать данные со страницы, а не с сервера?
 
-В многопользовательском приложении принято при изменении данных подтягивать все изменения с базы, иначе может быть несогласованность базы и UI (например когда пользователей редактируют несколько администраторов одновременно). В таблице еды наши пользователи видят только свои записи, но лучше для всех таблиц делать общий подход. Дополнительная нагрузка на базу тут совсем небольшая.
+В многопользовательском приложении принято при изменении данных подтягивать все изменения с базы, иначе может быть несогласованность базы и UI (например когда пользователей редактируют несколько администраторов одновременно). Для еды доставать из базы данные при редактировании нет необходимости, но лучше делать все универсально. В таблице обычно представлены не все данные, которые можно редактировать. Дополнительная нагрузка на базу тут совсем небольшая. Для еды нам при каждом добавлении-удалении-редактировании еще необходимо пересчитывать превышение excess.
 
 #### Apply 9_02_HW8_clear_filter.patch
 > Добавил сброс фильтра
@@ -41,6 +39,7 @@
 > - Перенес метод `enable` в `topjava.users.js` и сделал стиль для пользователей через атрибут `data-userEnabled`
 > - Меняю стиль `<tr>` ПОСЛЕ успешной обработки запроса через `data-userEnabled`, при ошибке возвращаю `checked` в прежнее состояние
 > - Убрал `init()`. При переводе таблицы на Ajax вместо него будет `createdRow`. Атрибуты `data-userEnabled` добавляются при отрисовки таблицы в JSP
+> - Добавил `AdminRestController.enable` через [PATCH - частичное изменение ресурса](http://restcookbook.com/HTTP%20Methods/patch/). Интересно, что через PUT реализация без дополнительных приседаний не получится, т.к. [сервлеты не поддерживают параметров в PUT и DELETE](https://stackoverflow.com/a/39706584/548473).   
 
 ## Занятие 9:
 
@@ -59,7 +58,6 @@
 #### Apply 9_06_validation.patch
 > - `responseJSON` не выводится в случае его отсутствия (например при попытке добавить пользователья с дублирующимся email)
 > - сделал конкатенацию ошибок через `StringJoiner`
-> - при неверном формате email делается проверка `startsWith`, чтобы поле email не дублировалось в сообщении 
 
 -  <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#validation-beanvalidation">Spring Validation.</a>
 -  <a href="http://beanvalidation.org/">Bean Validation</a>
@@ -107,26 +105,26 @@
 #### Apply 9_10_jsp_form_login.patch
 > Рефакторинг
 > - В `login.jsp` вместо атрибутов достаю параметры запроса (`param.error/message`).
-> - Закрыл доступ к `/login` для уже авторизованных в приложении пользователей (в `spring-security.xml` изменил `permitAll` на `isAnonymous`)
+> - Сделал i18n описания приложения
 > - При нажании кнопок `Зайти как ...` сделал вход в приложение 
 
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#ns-form-and-basic">Собственный form-login</a>
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 8. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFYTA4aVN4bWxzbEU">Реализация собственного провайдера авторизации.</a>
 #### Apply 9_11_auth_via_user_service.patch
+> В `UserService` добавил `@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)`, т.к. без этой аннотации для кэширования создается прокси над интерфейсом `UserDetailsService` (см. следующее видео по типам проксирования Spring). Можете проверить, что без этой аннотации приложение не поднимется. 
 
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#userdetailsservice-implementations">UserDetailsService Implementations</a>
+- [serialVersionUID value](https://stackoverflow.com/a/605832/548473)
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 9.  <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFT2Qya2V4N0kzWWM">Принцип работы Spring Security. Проксирование.</a>
--  <a href="http://www.spring-source.ru/articles.php?type=manual&theme=articles&docs=article_07">Принцип работы Spring Security</a>
+-  <a href="https://ru.wikibooks.org/wiki/Spring_Security/Технический_обзор_Spring_Security">Технический обзор Spring Security</a>
 -  <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-proxying">Типы проксирования</a>
 -  <a href="http://samolisov.blogspot.ru/2010/04/proxy-java.html">Dynamic Proxy API</a>
--  <a href="http://stackoverflow.com/questions/13977093/how-to-use-jparepositories-with-proxy-target-class-true/25543659#25543659">Конфликт проксирования Data Repository</a>
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#filter-stack">Security фильтры</a>
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 10. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFU3hMR0o4eGNoUmc">Spring Security Test</a>
 #### Apply 9_12_spring_security_test.patch
-#### Apply 9_13_test_fix.patch
 
 > - Cделал "честную" авторизацию в `RootControllerTest` (через `authentication` в утильном методе `TestUtil`)
 > - Cделал `mockAuthorize` для `SpringMain`, в который не попадают фильтры
@@ -135,6 +133,11 @@
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#test-mockmvc">Интеграция со Spring MVC Test</a>
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#testing-http-basic-authentication">HttpBasic авторизация</a>
 -  <a href="http://habrahabr.ru/post/171911/">Тестирование контроллеров с помощью MockMvc (без spring-security-test)</a>
+
+###  Рефакторинг ролей
+#### Apply 9_13_fix_roles.patch
+> `GrantedAuthority` это "разрешение" или "право". Если оно дается на основе роли, в Spring Security принято использовать префикс `ROLE_`. При этом сама роль не должна иметь префикс.
+- [Role and GrantedAuthority](https://stackoverflow.com/a/19542316/548473)
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 11. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFUzNFanF6MGZGNHc">Cookie. Session.</a>
 -  <a href="https://ru.wikipedia.org/wiki/HTTP_cookie">HTTP cookie</a></h3>
@@ -155,9 +158,9 @@
 
 Есть данные, которые передаются между клиентом и сервером в формате json или get/post с параметрами, есть стили взаимодействия клиента и сервера (<a href="https://ru.wikipedia.org/wiki/REST">REST</a>, <a href="http://jsonapi.org/">JSON API</a>, <a href="https://ru.wikipedia.org/wiki/JSON-RPC">JSON-RPC</a>) и есть отрисовка UI: JSP, Javascript фреймворк, Thymleaf и пр. Не надо эти вещи путать между собой. 
 
-> По умолчанию спринг работает с `UserDetailsService`, который должен возвращать `UserDetails`. Но мы не хотим стандартные, мы хотим свои, поэтому просто наследуем наши `UserServiceImpl` и `AuthorizedUser` от соответствующих интерфейсов и реализуем недостающие методы, которые spring security и будет использовать?
+> По умолчанию спринг работает с `UserDetailsService`, который должен возвращать `UserDetails`. Но мы не хотим стандартные, мы хотим свои, поэтому просто наследуем наши `UserService` и `AuthorizedUser` от соответствующих интерфейсов и реализуем недостающие методы, которые spring security и будет использовать?
 
-Да. Сервис аутентификации конфигурится в `spring-security.xml` `<authentication-manager>` и должен реализовывать интерфейс `UserDetailsService`. В spring-security есть его стандартные реализации, которые использовались до нашей кастомной `UserServiceImpl`, например `jdbc-user-service` использует реализацию `JdbcUserDetailsManager`
+Да. Сервис аутентификации конфигурится в `spring-security.xml` `<authentication-manager>` и должен реализовывать интерфейс `UserDetailsService`. В spring-security есть его стандартные реализации, которые использовались до нашей кастомной `UserService`, например `jdbc-user-service` использует реализацию `JdbcUserDetailsManager`
 
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Домашнее задание HW9
 
@@ -165,7 +168,7 @@
 - 2: Перевести `meals.jsp` на работу по ajax. Стиль строки таблицы сделать в зависимости от `excess`, время отображать без `T`. Добавить i18n.
 - 3: Починить meals тесты, добавить тест на неавторизованный доступ
 
-#### Optional
+### Optional
 - 4: Подключить datetime-picker к фильтрам и модальному окну добавления/редактирования еды
   - <a href="http://xdsoft.net/jqplugins/datetimepicker/">DateTimePicker jQuery plugin</a>
   - [jQuery: конверторы](https://jquery-docs.ru/jQuery.ajax/#using-converters)
@@ -183,7 +186,8 @@
 <c:forEach var='key' ...
 i18n['${key}'] = ...
 ```
-- 3: Для подключения css и js datetimepicker-а посмотрите в его jar (или поищите в проекте по Ctrl+Shift+N: `datetimepicker`)
+- 3: Для подключения css и js datetimepicker-а посмотрите в его jar (или поищите в проекте по Ctrl+Shift+N: `datetimepicker`). 
+При ошибке в datetimepicker javascript, обратите внимание на **имя javascript файла** в [DateTimePicker](https://xdsoft.net/jqplugins/datetimepicker/) "How do I use it?"
 - 4: datetimepicker работает корректно в Хроме, если убрать в `type` в `<input type="date/time/datetime-local" ..`
 - 5: Если появляются проблемы с JS типа `... is not defined` - обратите внимание на порядок загрузки скриптов и атрибут `defer`. Скрипты должны идти в нужном порядке. Если определяете скрипт прямо в jsp, он выполняется до `defer` скриптов.
 - 6: Не дублируйте обработку ошибок в `BindingResult` в ajax контроллерах

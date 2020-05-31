@@ -12,7 +12,6 @@ Java Enterprise Online Project
     Старинная китайская поговорка
 
 ### [Демо разрабатываемого приложения](http://topjava.herokuapp.com/)
-### [Изменения проекта (Release Notes)](ReleaseNotes.md)
 
 Вводное занятие (обязательно смотреть все видео)
 ===============
@@ -41,8 +40,14 @@ Java Enterprise Online Project
 
 ##  ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFZDdaaU5fZEo4X3c">Работа с проектом (выполнять инструкции)</a>
 **ВНИМАНИЕ: выбирайте для проекта простой пусть без пробелов и русских букв, например (Windows) `c:\projects\topjava\`. Иначе впоследствии будут проблемы**
-> Проект постоянно улучшается, поэтому видео иногда отличается от кода проекта. Изменения указываю после видео: в `UserMeals/UserMealWithExceed` поля изменились на `private`
-- **<a href="https://drive.google.com/open?id=1zRIqAeLYGMb4T3JOrqDQv6ZN7HwWqgS_">Prepare_ to_ HW0.patch (скачать и положить в каталог вашего проекта)</a>**
+### Патч <a href="https://drive.google.com/file/d/1QGFdLlBFqUA_lXMKaGaFPq8qn4SEvPeE">prepare_to_HW0.patch</a> (скачать и положить в каталог вашего проекта)
+
+> Проект постоянно улучшается, поэтому видео иногда отличается от кода проекта. Изменения указываю после видео: 
+> - переименовал класс `UserMealWithExceed` и его поле `exceed` в `UserMealWithExcess.excess`
+> - в `UserMeals/UserMealWithExcess` поля изменились на `private`
+> - обновил данные `UserMealsUtil.meals` и переименовал некоторые пременные, поля и методы
+> - добавил `UserMealWithExcess.toString()` и метод для выполнения _Optional домашнего задания_
+
 
 ##  Инструкция по шагам (из видео):</h3>
 -  <a href="http://javaops.ru/view/soft">Установить ПО (git, JDK8, IntelliJ IDEA, Maven)</a>
@@ -53,7 +58,7 @@ Java Enterprise Online Project
 -  Открыть и настроить проект в IDEA
    - <a href="http://stackoverflow.com/questions/29695918/intellij-idea-console-issue#33035499">Выставить кодировку UTF-8 в консоли</a>
    - <a href="https://github.com/JavaOPs/topjava/wiki/IDEA#%D0%9F%D0%BE%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BA%D0%BE%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D1%83-utf-8">Поставить кодировку UTF-8</a>
-   - <a href="https://github.com/JavaOPs/topjava/wiki/IDEA#%D0%9F%D0%BE%D0%BC%D0%B5%D0%BD%D1%8F%D1%82%D1%8C-%D1%84%D0%BE%D0%BD%D1%82-%D0%BF%D0%BE-%D1%83%D0%BC%D0%BE%D0%BB%D1%87%D0%B0%D0%BD%D0%B8%D1%8E-dejavu">Поменять фонт по умолчанию (DejaVu)</a>
+   - Опционально: <a href="https://github.com/JavaOPs/topjava/wiki/IDEA#%D0%9F%D0%BE%D0%BC%D0%B5%D0%BD%D1%8F%D1%82%D1%8C-%D1%84%D0%BE%D0%BD%D1%82-%D0%BF%D0%BE-%D1%83%D0%BC%D0%BE%D0%BB%D1%87%D0%B0%D0%BD%D0%B8%D1%8E-dejavu">Поменять фонт по умолчанию (DejaVu)</a> или на **новый [JetBrains Mono](https://habr.com/ru/company/jugru/news/t/484134/)**
 -  По ходу видео сделать Apply Patch... скаченного патча Prepare_ to_ HW0.patch
 -  Закоммитить и запушить изменения (commit + push)
 -  Сделать ветку домашнего задания
@@ -62,30 +67,34 @@ Java Enterprise Online Project
 
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Домашнее задание HW0
 ```
-Реализовать метод UserMealsUtil.getFilteredWithExceeded:
--  должны возвращаться только записи между startTime и endTime 
--  поле UserMealWithExceed.exceed должно показывать, 
-                                     превышает ли сумма калорий за весь день параметра метода caloriesPerDay  
+Реализовать метод `UserMealsUtil.filteredByCycles` через циклы (`forEach`):
+-  должны возвращаться только записи между `startTime` и `endTime`
+-  поле `UserMealWithExcess.excess` должно показывать, 
+                                     превышает ли сумма калорий за весь день значение `caloriesPerDay`
         
-Т.е UserMealWithExceed - это запись одной еды, но поле exceeded будет одинаково для всех записей за этот день.
+Т.е `UserMealWithExcess` - это запись одной еды, но поле `excess` будет одинаково для всех записей за этот день.
     
 - Проверьте результат выполнения ДЗ (можно проверить логику в http://topjava.herokuapp.com , список еды)
-- Оцените Time complexity вашего алгоритма, если он O(N*N)- попробуйте сделать O(N).
+- Оцените Time complexity алгоритма. Если она больше O(N), например O(N*N) или N*log(N), сделайте O(N).
 ```
 -  <a href="http://www.mscharhag.com/2014/02/java-8-datetime-api.html">Java 8 Date and Time API</a>
 -  <a href="https://tproger.ru/translations/algorithms-and-data-structures">Алгоритмы и структуры данных для начинающих: сложность алгоритмов</a>
+-  [Головач: сложность алгоритмов в теме коллекций](https://www.youtube.com/watch?v=Ek9ijOiplNE&feature=youtu.be&t=778)
 -  <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFNEJWRFJkVDA3TkU/view">Time complexity</a>
 -  <a href="https://ru.wikipedia.org/wiki/Временная_сложность_алгоритма">Временная сложность алгоритма</a>
 -  <a href="https://ru.wikipedia.org/wiki/Вычислительная_сложность">Вычислительная сложность</a>
 
-#### Optional (Java 8 Stream API)
+#### ВНИМАНИЕ: варианты Optional делайте в `UserMealsUtil` в одной ветке в разных методах. Проще делать, проще проверять
+
+### Optional (Java 8 Stream API)
 ```
-Сделать реализацию через Java 8 Stream API.
+Реализовать метод `UserMealsUtil.filteredByStreams` через Java 8 Stream API.
 ```
 -  <a href="http://www.youtube.com/watch?v=_PDIVhEs6TM">Видео: Доступно о Java 8 Lambda</a>
 -  <a href="https://devcolibri.com/java-8-killer-features-%D1%87%D0%B0%D1%81%D1%82%D1%8C-1/">Java 8: Lambda выражения</a>
 -  <a href="https://devcolibri.com/java-8-killer-features-%D1%87%D0%B0%D1%81%D1%82%D1%8C-2/">Java 8: Потоки</a>
--  <a href="http://prologistic.com.ua/polnoe-rukovodstvo-po-java-8-stream.html">Pуководство по Java 8 Stream</a>
+-  <a href="https://javadevblog.com/polnoe-rukovodstvo-po-java-8-stream.html">Pуководство по Java 8 Stream</a>
+-  <a href="https://annimon.com/article/2778">Java 8 Stream API в картинках и примерах</a>
 -  [7 способов использовать groupingBy в Stream API](https://habrahabr.ru/post/348536)
 -  <a href="http://habrahabr.ru/post/224593/">Лямбда-выражения в Java 8</a>
 -  <a href="https://github.com/winterbe/java8-tutorial">A Guide to Java 8</a>
@@ -97,16 +106,17 @@ Java Enterprise Online Project
    - [Сергей Куксенко — Stream API, часть 1](https://www.youtube.com/watch?v=O8oN4KSZEXE)
    - [Сергей Куксенко — Stream API, часть 2](https://www.youtube.com/watch?v=i0Jr2l3jrDA)
 
-#### Optional 2 (+5 бонусов)
-```
-Сделать реализацию со сложностью O(N):
-- циклом за 1 проход по List<UserMeal>. Обратите внимание на п.13 замечаний
-- через Stream API за 1 проход по исходному списку Stream<UserMeal> meals
+### Optional 2 (+5 бонусов)
+Сделать реализацию со сложностью O(N) (обратите внимание на п.13 замечаний):
+- циклом за 1 проход по `List<UserMeal>`
+  - без циклов по другим коллекциям
+  - решение должно быть рабочим в общем случае (не только при запуске main)
+- через Stream API за 1 проход по исходному списку `meals.streem()`
+  - нельзя использовать внешние коллекции, не являющиеся частью коллектора или 2 раза проходить по исходному списку (его копиям).
+    Т.е. в решении не должно быть 2 раза `meal.stream()` (в том числе неявно, в составных коллекторах)
   - возможно дополнительные проходы по частям списка
-  - нельзя использовать внешние коллекции, не являющиеся частью коллектора или результатами работы stream
-```
 
-#### Замечания по использованию Stream API:
+### Замечания по использованию Stream API:
 - Когда встречаешь что-то непривычное, приходится перестраивать мозги. Например, переход с процедурного на ООП программирование дается непросто. Те, кто не знает шаблонов (и не хотят учить) также их встречают плохо. Хорошая новость в том, что если это принять и начать использовать, то начинаешь получать от этого удовольствие. И тут главное не впасть в другую крайность:
   - [Используйте Stream API проще (или не используйте вообще)](https://habrahabr.ru/post/337350/)
 - Если вас беспокоить производительность стримов, обязательно прочитайте про оптимизацию 
@@ -119,7 +129,7 @@ Java Enterprise Online Project
   
 ## ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Замечания к HW0
 - 1: Код проекта менять можно! Одна из распространенных ошибок как в тестовых заданиях на собеседовании, так и при работе на проекте, что ничего нельзя менять. Конечно при правках в рабочем проекте обязательно нужно проконсультироваться/проревьюироваться у авторов кода (находится по истории VCS)
-- 2: Наследовать `UserMealWithExceed` от `UserMeal` я не буду, т.к. это разные сущности: Transfer Object и Entity. Мы будет их проходить на 2м уроке.
+- 2: Наследовать `UserMealWithExcess` от `UserMeal` я не буду, т.к. это разные сущности: Transfer Object и Entity. Мы будет их проходить на 2м уроке.
 - 3: Правильная реализация должна быть простой и красивой, можно сделать 2-мя способами: через стримы и через циклы. Сложность должна быть O(N), т.е. без вложенных стримов и циклов.
 - 4: При реализации через циклы посмотрите в `Map` на методы `getOrDefault` или `merge`
 - 5: **При реализации через `Stream` заменяйте `forEach` оператором `stream.map(..)`**
@@ -128,14 +138,14 @@ Java Enterprise Online Project
 - 8: Пользуйтесь форматированием кода в IDEA: `Alt+Ctrl+L`
 - 9: Перед check-in проверяйте чендж-лист (курсор на файл и Ctrl+D): не оставляйте в коде ничего лишнего (закомментированный код, TODO и пр.). Если файл не меняется (например только пробелы или переводы строк), не надо его чекинить, делайте ему `revert` (Git -> Revert / `Ctrl+Alt+Z`).
 - 10: `System.out.println` нельзя делать нигде, кроме как в `main`. Позже введем логирование.
-- 11: Результаты, возвращаемые `UserMealsUtil.getFilteredWithExceeded` мы будем использовать [в нашем приложении](http://topjava.herokuapp.com/) для фильтрации по времени и отображения еды правильным цветом.
+- 11: Результаты, возвращаемые `UserMealsUtil.filteredByStreams` мы будем использовать [в нашем приложении](http://topjava.herokuapp.com/) для фильтрации по времени и отображения еды правильным цветом.
 - 12: Обращайте внимание на комментарии к вашим коммитам в git. Они должны быть короткие и информативные (лучше на english)
 - 13: Не полагайтесь в решении на то, что список будет подаваться отсортированным. Такого условия нет.
 -----
 
 ### Полезные ресурсы
 > ВНИМАНИЕ:
->  - ДЗ первого урока будет связано с <a href="https://danielniko.wordpress.com/2012/04/17/simple-crud-using-jsp-servlet-and-mysql/">созданием небольшого CRUD приложения (в памяти, без DB) на JSP и сервлетах</a>. Введение будет, но предварительное знакомство не помешает.
+>  - **ДЗ первого урока будет связано с [созданием небольшого CRUD приложения (в памяти, без DB) на JSP и сервлетах](http://danielniko.com/2012/04/17/simple-crud-using-jsp-servlet-and-mysql/)**. Введение будет, но предварительное знакомство не помешает.
 >  - основы JavaSсript необходимы для понимания проекта, начиная с 8-го занятия!
 
 Все остальное - опционально.
@@ -168,11 +178,12 @@ Java Enterprise Online Project
 -  <a href="https://github.com/winterbe/java8-tutorial">A Guide to Java 8</a>
 
 ### Туториалы, разное
-[Что нужно знать о бэкенде новичку в веб-разработке](https://tproger.ru/translations/backend-web-development)
-[Туториалы: Spring Framework, Hibernate, Java Core, JDBC](http://proselyte.net/tutorials/)
+- [Что нужно знать о бэкенде новичку в веб-разработке](https://tproger.ru/translations/backend-web-development)
+- [Туториалы: Spring Framework, Hibernate, Java Core, JDBC](http://proselyte.net/tutorials/)
 
 #### Сервлеты
 -  <a href="https://devcolibri.com/как-создать-servlet-полное-руководство/">Как создать Servlet? Полное руководство.</a>
+-  [Сервлеты](https://metanit.com/java/javaee/4.1.php)
 
 #### JDBC, SQL
 - <a href="https://habrahabr.ru/post/123636/">Основы SQL на примере задачи</a>

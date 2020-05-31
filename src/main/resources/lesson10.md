@@ -1,11 +1,12 @@
-# Онлайн проекта <a href="https://github.com/JavaWebinar/topjava">Topjava</a>
+# Онлайн-проекта <a href="https://github.com/JavaWebinar/topjava">Topjava</a>
 
 ## [Материалы занятия](https://drive.google.com/open?id=0B9Ye2auQ_NsFfk43cG91Yk9pM3JxUHVhNFVVdHlxSlJtZm5oY3A4YXRtNk1KWEZxRlFNeW8)
 
-### ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Правка
+### ![correction](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Правки в проекте
 
 #### Apply 10_0_fix.patch
-> - Начальная страница недоступна авторизированным пользователям (только `isAnonymous()`) и если после логина перейти в браузере назад, получим "403 forbidden". Сделал ее доступным всем.
+> - Мелкие правки
+> - В `update()` при реализации через JPA `repository.save()` не обязателен: если в `@Transactional` entity достается из DB и изменяется, он сохраняется автоматически     
 
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Разбор домашнего задания HW9
 
@@ -16,14 +17,16 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 > - JavaScript `i18n[]` локализацию перенес в `i18n.jsp` и передаю туда `page` как параметр
 >   - [JSP include action with parameter example](https://beginnersbook.com/2013/12/jsp-include-with-parameter-example)
-> - Вынес общий код в `ValidationUtil.getErrorResponse()` 
+> - Вынес общий код в `ValidationUtil.getErrorResponse()` и сделал обработку через `stream()`
 > - Вынес создание `DataTable` в `topjava.common.js`. В параметр конфигурации добавляю общие опции используя [jQuery.extend()](https://api.jquery.com/jquery.extend/#jQuery-extend-deep-target-object1-objectN)
 
 #### Apply 10_2_HW9_test.patch
+
 #### Apply 10_3_HW9_datetimepicker.patch
-> - Изменил формат ввода dateTime в форме без 'T': при биндинге значений к полям формы в `datatablesUtil.updateRow()` для поля `dateTime` делаю `replace('T', ' ')`.  REST интерфейс по прежнему работает в стандарте ISO-8601
-> - Вынес общий код в `datatablesUtil.formatDate()` 
+> - Вынес форматирование даты в `topjava.common.formatDate()` 
+> - Изменил формат ввода dateTime в форме без 'T': при биндинге значений к полям формы в `topjava.common.updateRow()` для поля `dateTime` вызываю `formatDate()`.  REST интерфейс по прежнему работает в стандарте ISO-8601
 > - В новой версии `datetimepicker` работает ограничение выбора времени `startTime/endTime`
+> - Добавил `autocomplete="off"` для выключения автоподстановки (у некоторых участников мешает вводу, у меня не воспроизводится)
 
 - <a href="http://xdsoft.net/jqplugins/datetimepicker/">DateTimePicker jQuery plugin</a>
 - <a href="https://github.com/xdan/datetimepicker/issues/216">Datetimepicker and ISO-8601</a>
@@ -42,7 +45,7 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 #### Apply 10_05_opt_validated_groups.patch
 - [Validation Group in SpringMVC](https://narmo7.wordpress.com/2014/04/26/how-to-set-up-validation-group-in-springmvc/)
-- [@Validated and Default group](http://forum.spring.io/forum/spring-projects/web/117289-validated-s-given-groups-should-consider-default-group-or-not)
+- [@Validated and Default group](http://web.archive.org/web/20170826153901/http://forum.spring.io/forum/spring-projects/web/117289-validated-s-given-groups-should-consider-default-group-or-not)
 
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3. [Рефакторинг: jQuery конверторы и группы валидации по умолчанию](https://drive.google.com/file/d/1tOMOdmaP5OQ7iynwC77bdXSs-13Ommax)
@@ -61,7 +64,8 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 4. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFTVZyQnBlYUtkNms">Spring Security Taglib. Method Security Expressions.</a>
 #### Apply 10_06_secure_tag_annotation.patch
-> Сделал общий `bodyHeader.jsp` с разделением `isAnonymous/isAuthenticated`
+> - Сделал общий `bodyHeader.jsp` с разделением `isAnonymous/isAuthenticated`
+> - В `login.jsp` кнопки входа отображаю только для `isAnonymous`       
 
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#declaring-the-taglib">Spring Security Taglib.</a>
 -  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#jc-method">Method Security</a> и <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#method-security-expressions">Method Security Expressions</a>.
@@ -77,6 +81,12 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 -  <a href="http://www.mkyong.com/spring-mvc/spring-mvc-handler-interceptors-example/">Spring interceptors</a>.
 
 #### Apply 10_08_profile_jsptag.patch
+**Глюк Хрома - у меня поле `email` у User показывается неверно (как для admin). В другом браузере, анонимном окне и коде страницы (Ctrl+U) все ок. Я решил локально обновлением Хрома. Еще решения:**
+ - [В своем браузере](https://www.howtogeek.com/425270/how-to-disable-form-autofill-in-google-chrome)
+ - [Chrome ignores autocomplete=“off”](https://stackoverflow.com/questions/12374442/chrome-ignores-autocomplete-off)
+ - [Disabling Chrome Autofill](https://stackoverflow.com/questions/15738259/disabling-chrome-autofill)
+
+> - Создал отдельный `ProfileUIController` для операций с профилем (вместо `RootController`)
 > - Упростил: в `inputField.tag` передаю для label код локализации
 > - В профиль добавил кнопку "Cancel"
 
@@ -90,8 +100,8 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 > - Добавил локализацию
 > - При регистрации передаю `username` в `login.jsp` как параметр и делаю `setCredentials` (пароль вводится скрыто, поэтому его не передаю из соображений безопасности). Т.к `setCredentials` требует jQuery, убрал для него `defer`
-> - В `login.jsp` кнопки входа и регистрации отображаю только для `isAnonymous()`       
-> - Добавил регистрацию пользователя по REST: `ProfileRestController.register` и тест
+> - Поменял путь регистрации с `/registered` на `/profile/registered` (в `ProfileUIController` вместо `RootController`)
+> - Добавил регистрацию пользователя по REST: `ProfileRestController.register`, тест и пример `curl`. Обратите внимание на хедер `Location`, он отличается от `AdminRestController.createWithLocation`
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 7. <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFZ19lU29VVDRfNXM">Обработка исключений в Spring.</a>
                                                                                                                                 
@@ -103,6 +113,7 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 #### Apply 10_11_global_exception.patch
 > - Перед  отображением exception предварительно делаю `ValidationUtil.getRootCause`
 > - Добавил локализацию
+> - Добавил общий статус `500` в ответ и отображение (на следующем уроке будем его менять, в зависимости от типа ошибки) 
 
 -  <a href="http://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#global-exception-handling">Global Exception Handling</a>
 
@@ -118,7 +129,6 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
   *  @see  org.springframework.web.method.annotation.ExceptionHandlerMethodResolver#getMappedMethod
   *  164: Collections.sort(matches, new ExceptionDepthComparator(exceptionType))
 ```
-> - В `ExceptionInfoHandler.logAndGetErrorInfo()` также использую `ValidationUtil.getRootCause`
 > - Добавил в `curl.md` пример с возвращением `ErrorInfo`. Локализация ошибок будет на последнем занятии
 
 - <a href="http://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#errors-and-rest">Сериализация Exception в JSON</a>
@@ -128,23 +138,29 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 8. <a href="https://drive.google.com/file/d/1XZXvOThinzPw4EhigAUdo8-MWT_g8wOt">Encoding password. Json READ/WRITE access</a>
 #### Apply 10_13_password_encoding.patch
+> - Если при сохранении пароль пустой, оставляем старый
+> - Добавил утильный метод `UserService.prepareAndSave`
+> - Для InMemory тестов добавил `passwordEncoder` в  `inmemory.xml`
 
 - <a href="https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#core-services-password-encoding">Password Encoding</a>
 
 #### Apply 10_14_read_write_access.patch
-В реальном приложении для управления паролем необходим отдельный UI интерфейс с подтверждением старого пароля.
+> - Добавил методы сериализации в json `JsonUtil.writeAdditionProps` с дополнительными полями и `UserTestData.jsonWithPassword` для того, 
+чтобы передавать в контроллер пользователя с паролем (который теперь не сериализуется)   
+
+### В реальном приложении для управления паролем необходим отдельный UI интерфейс с подтверждением старого пароля - одна из ваших доработок проекта по окончанию стажировки
 
 - [@JsonProperty READ_ONLY / WRITE_ONLY](https://stackoverflow.com/a/12505165/548473)
 
 ### ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 9. <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFNDlPZGdUNThzNUU">Межсайтовая подделка запроса (CSRF).</a>
 #### Apply 10_15_csrf.patch
-> Убрал `form:form` из ajax запросов: там csrf работает через header. Проверьте в вкладке браузера Network.
+> Убрал `form:form` из ajax запросов: там csrf работает через header. Проверьте во вкладке браузера `Network`.
 
 **Поломалась UTF-8 кодировка в редактировании профиля и регистрациию (если по умолчанию не UTF-8). В Optional HW10 нужно будет починить.**
  
 -  <a class="anchor" id="csrf"></a><a href="https://ru.wikipedia.org/wiki/Межсайтовая_подделка_запроса">Межсайтовая подделка запроса (CSRF)</a>
--  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html#csrf-using/">Using Spring Security CSRF Protection</a>
--  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html#csrf-include-csrf-token-ajax">Ajax and JSON Requests</a>
+-  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/html/features.html#csrf">Using Spring Security CSRF Protection</a>
+-  <a href="https://docs.spring.io/spring-security/site/docs/current/reference/html/features.html#csrf-when-json">Ajax and JSON Requests</a>
 -  <a href="http://blog.jdriven.com/2014/10/stateless-spring-security-part-1-stateless-csrf-protection/">Stateless CSRF protection</a>
 -  Ресурсы:
     -  <a href="http://habrahabr.ru/post/264641/">Spring Security 4 + CSRF</a>
@@ -154,14 +170,14 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 ## ![question](https://cloud.githubusercontent.com/assets/13649199/13672858/9cd58692-e6e7-11e5-905d-c295d2a456f1.png) Ваши вопросы
 
-> В чем отличие между аннотоацией `@PreAuthorize("hasRole('ROLE_ADMIN')")` и конфигурацией в jsp: `<sec:authorize access="isAuthenticated()">`, `<sec:authorize access="hasRole('ROLE_ADMIN')">` ?
+> В чем отличие между аннотоацией `@PreAuthorize("hasRole('ADMIN')")` и конфигурацией в jsp: `<sec:authorize access="isAuthenticated()">`, `<sec:authorize access="hasRole('ADMIN')">` ?
 
 Анотация `@PreAuthorize` обрабатывается Spring анологично `@Transactional`, `@Cacheable` - класс проксируется и до-после вызова метода добавляется функциональность.
 В данном случае перед вызовом метода проверяются роль залогиненного юзера. JSTL тэг `authorize` выполняет проверку условия в залогиненном юзере внутри jsp.
 
 > Еще раз: почему не нужен csrf для REST и нельзя подделать JSON запрос с вредоносного сайта?
 
-Попробуйте выполнить ajax запрос из вашего приложения c url, у которого домен отличный от вашего (например "http://topjava.herokuapp.com/meals/ajax/admin/users/"+id).
+Попробуйте выполнить ajax запрос из вашего приложения c url, у которого домен отличный от вашего (например 'http://topjava.herokuapp.com/meals/ajax/admin/users/{id}').
 В консоли браузера будет `XMLHttpRequest cannot load`... - <a href="https://developer.chrome.com/extensions/xhr">нарушение same origin policy</a>. 
 Формам же разрешается делать submit (через `action=..`) на другой домен, но невозможно cделать `Content-Type`, отличный от <a href="http://htmlbook.ru/html/form/enctype">стндартных enctype</a> и методов <a href="http://htmlbook.ru/html/form/method">кроме get и post</a>. Таким образом `consumes = MediaType.APPLICATION_JSON_VALUE` в POST защищает приложение от CSRF.
 
@@ -169,25 +185,25 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
 
 [`BCryptPasswordEncoder` automatically generates a salt and concatenates it with the hash value in a single String](http://stackoverflow.com/a/8528804/548473).
 
-> Когда запускается в `GlobalControllerExceptionHandler` метод `defaultErrorHandler`? Когда как в него исключение попадает? Как выбирается, кто обрабатывает исключения: `ExceptionInfoHandler` или `GlobalControllerExceptionHandler`?
+> Когда запускается в `GlobalExceptionHandler` метод `defaultErrorHandler`? Когда как в него исключение попадает? Как выбирается, кто обрабатывает исключения: `ExceptionInfoHandler` или `GlobalExceptionHandler`?
 
- `GlobalControllerExceptionHandler` попадает в контекст спринг (через `@ControllerAdvice` его находят в пакете `web`). Далее спринг перехватывает исключения и отправляет в подходящий по исключению метод `GlobalControllerExceptionHandler`. `ExceptionInfoHandler` помечен `@ControllerAdvice(annotations = RestController.class)`, он обрабатывает только ошибки из всех контроллеров с аннотацией `RestController`.
+ `GlobalExceptionHandler` попадает в контекст спринг (через `@ControllerAdvice` его находят в пакете `web`). Далее спринг перехватывает исключения и отправляет в подходящий по исключению метод `GlobalExceptionHandler`. `ExceptionInfoHandler` помечен `@RestControllerAdvice(annotations = RestController.class)`, он обрабатывает только ошибки из всех контроллеров с аннотацией `RestController`.
  
  > Откуда берутся в валидации сообщения на русском "должно быть между 10 и 10000"?
  
  Локализация встроена в Hibernate Validation. Смотрите `Ctrl+Shift+N` и `ValidationMessages_ru.properties`.
 
 ## ![hw](https://cloud.githubusercontent.com/assets/13649199/13672719/09593080-e6e7-11e5-81d1-5cb629c438ca.png) Домашнее задание HW10
-- 1: Сделать валидацию в AdminAjaxController/MealAjaxController через `ExceptionInfoHandler`. Вернуть клиенту `ErrorInfo` и статус `HttpStatus.UNPROCESSABLE_ENTITY` (тип методов контроллеров вернуть обратно на `void`).
+- 1: Сделать валидацию в `AdminUIController/MealUIController` через `ExceptionInfoHandler`. Вернуть клиенту `ErrorInfo` и статус `HttpStatus.UNPROCESSABLE_ENTITY` (тип методов контроллеров сделать `void`).
 - 2: Сделать валидацию принимаемых json объектов в REST контроллерах через `ExceptionInfoHandler`. Добавить в Rest контроллеры тест для невалидных данных.
   - <a href="https://dzone.com/articles/spring-31-valid-requestbody">@Valid @RequestBody + Error handling</a>
-- 3: Сделать обработку ошибки при дублирования email ("User with this email already exists") для: 
+- 3: Сделать обработку ошибки при дублирования email (вывод сообщения "User with this email already exists") для: 
   - 3.1 регистрации / редактирования профиля пользователя
     - <a href="http://www.mkyong.com/spring-mvc/spring-mvc-form-handling-example/">Spring MVC form handling example</a>
   - 3.2 добавления / редактирования пользователя в таблице
   - 3.3 REST контроллеров
 
-#### Optional
+### Optional
 - 4: Сделать обработку ошибки при дублирования dateTime еды. Сделать тесты на дублирование email и dateTime.
   - [Тесты на DB exception c @Transactional](http://stackoverflow.com/questions/37406714)
   - [Сheck String in response body with mockMvc](https://stackoverflow.com/questions/18336277/how-to-check-string-in-response-body-with-mockmvc)
@@ -198,10 +214,10 @@ Datatables перевели на ajax (`"ajax": {"url": ajaxUrl, ..`), те пр
   
 -------
 
-## ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Проверка в HW10
+## ![error](https://cloud.githubusercontent.com/assets/13649199/13672935/ef09ec1e-e6e7-11e5-9f79-d1641c05cbe6.png) Типичные ошибки и подсказки по реализации
 - 1: `ErrorInfo` просто бин для передачи информации на клиента. Кода возврата и ответ настраиваются в `ExceptionInfoHandler`.
 - 2: Не дублируйте обработку ошибок `BindingResult`: `result.getFieldErrors()..` 
 - 3: Можно не создавать собственные эксепшены, а в `ExceptionInfoHandler` ловить стандартные 
 - 4: в `MethodArgumentNotValidException` также есть `e.getBindingResult()`, его можно обрабатывать по аналогии с `BindException`
 - 5: Не дублируйте код переключения локали на странице логина и в приложении
-- 6: При проблемах с валидацией `Meals` в `MealRestController`, посмотрите на валидацию в `MealAjaxController.updateOrCreate`
+- 6: При проблемах с валидацией `Meals` в `MealRestController`, посмотрите на валидацию в `MealUIController.updateOrCreate`
